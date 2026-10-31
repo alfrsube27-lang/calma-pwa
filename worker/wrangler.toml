@@ -1,0 +1,32 @@
+#  Configuración del Worker de Calma
+#  Despliegue:  npx wrangler deploy
+#
+#  Cambia "database_id" por el que te dé:
+#     npx wrangler d1 create calma
+
+name = "calma"
+main = "src/index.js"
+compatibility_date = "2025-01-01"
+
+# Base de datos SQLite gratuita (D1)
+[[d1_databases]]
+binding = "DB"
+database_name = "calma"
+database_id = "PON-AQUI-EL-ID-DE-TU-BASE"
+
+# El cron revisa cada minuto si toca enviar algún recordatorio
+[triggers]
+crons = ["* * * * *"]
+
+# Variables NO secretas.
+# Pon aquí el origen exacto de tu PWA para cerrar el CORS, por ejemplo:
+#   ORIGEN = "https://calma-7k3p9.pages.dev"
+# Si lo dejas vacío, acepta cualquier origen (igual todo pide token).
+[vars]
+ORIGEN = ""
+
+# Los secretos NO van en este archivo. Se guardan con:
+#   npx wrangler secret put TOKEN_APP
+#   npx wrangler secret put VAPID_PUBLIC_KEY
+#   npx wrangler secret put VAPID_PRIVATE_KEY
+#   npx wrangler secret put VAPID_SUBJECT

@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Generar claves VAPID</title>
+<style>
+  :root { color-scheme: dark; }
+  body {
+    margin: 0; padding: 28px 20px; background: #121a1f; color: #e8eef1;
+    font-family: -apple-system, system-ui, sans-serif; line-height: 1.5;
+    max-width: 680px; margin-inline: auto;
+  }
+  h1 { font-size: 24px; }
+  p { color: #9bb0bb; }
+  button {
+    width: 100%; min-height: 54px; margin: 18px 0; border: none; border-radius: 16px;
+    background: #8ab4d8; color: #0e1a22; font: inherit; font-size: 17px;
+    font-weight: 600; cursor: pointer;
+  }
+  label { display: block; margin: 18px 0 6px; font-size: 14px; color: #9bb0bb; }
+  textarea {
+    width: 100%; min-height: 72px; padding: 12px; font-family: ui-monospace, monospace;
+    font-size: 13px; color: #e8eef1; background: #22303a; border: 1px solid #2d3e4a;
+    border-radius: 12px; resize: vertical; box-sizing: border-box;
+  }
+  pre {
+    background: #1b262d; border: 1px solid #2d3e4a; border-radius: 12px;
+    padding: 14px; overflow-x: auto; font-size: 13px;
+  }
+  .nota { background: #35301f; border: 1px solid #e9c46a; border-radius: 12px;
+          padding: 14px; color: #e8eef1; }
+</style>
+</head>
+<body>
+
+<h1>Claves VAPID para Calma</h1>
+<p>Abre este archivo en cualquier navegador (doble clic) y toca el botón.
+Las claves se generan en tu computadora y no se envían a ninguna parte.</p>
+
+<button id="generar">Generar mis claves</button>
+
+<div id="salida" hidden>
+  <label>VAPID_PUBLIC_KEY (pública)</label>
+  <textarea id="publica" readonly></textarea>
+
+  <label>VAPID_PRIVATE_KEY (privada — no la compartas)</label>
+  <textarea id="privada" readonly></textarea>
+
+  <label>TOKEN_APP (token secreto de la app)</label>
+  <textarea id="token" readonly></textarea>
+
+  <label>Comandos para guardarlas en Cloudflare</label>
+  <pre id="comandos"></pre>
+
+  <div class="nota">
+    Guarda este texto en un lugar seguro. Si pierdes la clave privada
+    tendrás que generar otras y volver a activar las notificaciones en el iPhone.
+  </div>
+</div>
+
+<script>
+const aB64url = (buffer) => btoa(String.fromCharCode(...new Uint8Array(buffer)))
+  .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+
+document.getElementById('generar').onclick = async () => {
+  // Par de claves P-256, el único que acepta Web Push
+  const par = await crypto.subtle.generateKey(
+    { name: 'ECDSA', namedCurve: 'P-256' }, true, ['sign', 'verify']
+  );
+
+  const publicaCruda = await crypto.subtle.exportKey('raw', par.publicKey);
+  const jwk = await crypto.subtle.exportKey('jwk', par.privateKey);
+
+  const publica = aB64url(publicaCruda);   // 65 bytes
+  const privada = jwk.d;                   // ya viene en base64url
+
+  // Token largo al azar para proteger las rutas del Worker
+  const bytes = crypto.getRandomValues(new Uint8Array(32));
+  const token = aB64url(bytes);
+
+  document.getElementById('publica').value = publica;
+  document.getElementById('privada').value = privada;
+  document.getElementById('token').value = token;
+  document.getElementById('comandos').textContent =
+`cd worker
+npx wrangler secret put VAPID_PUBLIC_KEY
+# pega: ${publica}
+
+npx wrangler secret put VAPID_PRIVATE_KEY
+# pega: ${privada}
+
+npx wrangler secret put TOKEN_APP
+# pega: ${token}
+
+npx wrangler secret put VAPID_SUBJECT
+# pega: mailto:tucorreo@ejemplo.com`;
+
+  document.getElementById('salida').hidden = false;
+};
+</script>
+</body>
+</html>

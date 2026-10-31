@@ -1,0 +1,36 @@
+# ===========================================================
+# Lo que NUNCA sube a GitHub.
+#
+# Git no olvida: si un secreto entra una vez, queda en el historial
+# aunque después lo borres. Por eso este archivo va en el primer
+# commit, antes que nada.
+#
+# Los datos de prueba SÍ suben: son inventados y le sirven a quien
+# quiera probar la app sin empezar de cero.
+# ===========================================================
+
+# ── Credenciales ──
+# Clave privada VAPID y TOKEN_APP. Esto no es información personal,
+# son llaves: con ellas cualquiera manda notificaciones a tu teléfono
+# y entra a tu backend. Se quedan en tu PC.
+MIS-CLAVES-CLOUDFLARE.txt
+*CLAVES*
+*.secret
+.env
+.dev.vars
+
+# ── Basura del sistema ──
+Thumbs.db
+desktop.ini
+.DS_Store
+
+# ── Herramientas ──
+__pycache__/
+*.pyc
+node_modules/
+.wrangler/
+
+# ── Generado ──
+# Se arma desde worker/src/ con el empaquetador; no hace falta
+# versionar la copia, y duplicarla invita a editar la equivocada.
+worker/calma-worker-completo.js

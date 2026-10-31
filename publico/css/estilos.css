@@ -1,0 +1,799 @@
+/* ===========================================================
+   Calma — hoja de estilos única
+   Principios: modo oscuro suave, textos cortos, botones grandes,
+   una sola acción principal por pantalla, nunca rojo agresivo.
+   =========================================================== */
+
+:root {
+  /* Fondos */
+  --fondo:        #121a1f;
+  --superficie:   #1b262d;
+  --superficie-2: #22303a;
+  --borde:        #2d3e4a;
+
+  /* Textos */
+  --texto:        #e8eef1;
+  --texto-suave:  #9bb0bb;
+
+  /* Estados: tonos apagados, ningún rojo de alarma */
+  --bien:         #74c69d;  /* verde salvia */
+  --bien-fondo:   #1e332b;
+  --aviso:        #e9c46a;  /* ámbar */
+  --aviso-fondo:  #35301f;
+  --limite:       #e8955c;  /* naranja cálido (nunca rojo) */
+  --limite-fondo: #3a2a20;
+  --acento:       #8ab4d8;  /* azul tranquilo */
+  --acento-fondo: #1d2c38;
+
+  /* Medidas */
+  --radio:        18px;
+  --radio-chico:  12px;
+  --toque:        56px;     /* altura mínima cómoda para el pulgar */
+  --seguro-abajo: env(safe-area-inset-bottom, 0px);
+  --seguro-arriba: env(safe-area-inset-top, 0px);
+}
+
+/* ───────── Tema claro ─────────
+   No se enciende solo por la preferencia del sistema: lo enciende la
+   persona, hablando con el chat o desde Ajustes. Un cambio de brillo
+   que nadie pidió, de noche, es justo lo contrario de esta app.
+
+   Mismos papeles de color, subidos de luminosidad. Ningún rojo, igual
+   que en el oscuro: el "pasaste el límite" sigue siendo naranja. */
+:root[data-tema="claro"] {
+  --fondo:        #f4f7f8;
+  --superficie:   #ffffff;
+  --superficie-2: #eaf0f3;
+  --borde:        #d6e0e6;
+
+  --texto:        #16242c;
+  --texto-suave:  #5d7682;
+
+  --bien:         #2f8c62;
+  --bien-fondo:   #e2f2ea;
+  --aviso:        #a9792a;
+  --aviso-fondo:  #faf1dc;
+  --limite:       #c2622c;
+  --limite-fondo: #fbeade;
+  --acento:       #2f6d9e;
+  --acento-fondo: #e4eef7;
+
+  --barra-fondo:  rgba(244, 247, 248, .94);
+}
+
+/* En claro los emojis de la barra no necesitan apagarse: sobre fondo
+   claro el gris los vuelve ilegibles. */
+:root[data-tema="claro"] .pestania span { filter: none; opacity: .85; }
+
+/* En claro, el texto sobre el botón de acento tiene que ser el claro */
+:root[data-tema="claro"] .boton.principal,
+:root[data-tema="claro"] .burbuja.mia {
+  color: #ffffff;
+}
+
+* { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--fondo);
+  color: var(--texto);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  font-size: 17px;
+  line-height: 1.45;
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior-y: none;
+}
+
+body { min-height: 100svh; }
+
+.oculto { display: none !important; }
+
+h1, h2, h3 { margin: 0 0 8px; font-weight: 650; letter-spacing: -0.01em; }
+h1 { font-size: 26px; }
+h2 { font-size: 20px; }
+h3 { font-size: 17px; }
+p  { margin: 0 0 10px; }
+
+/* ───────── Estructura ───────── */
+
+.contenido {
+  padding: calc(var(--seguro-arriba) + 18px) 16px 150px;
+  max-width: 560px;
+  margin: 0 auto;
+  outline: none;
+}
+
+.encabezado-vista { margin-bottom: 18px; }
+.encabezado-vista .fecha {
+  color: var(--texto-suave);
+  font-size: 14px;
+}
+
+/* Mayúscula solo en la primera letra ("lunes 26 de octubre" -> "Lunes 26 de octubre").
+   `capitalize` pondría mayúscula a cada palabra, que se ve raro en español. */
+.capital, .encabezado-vista .fecha, .cal-cabecera .mes {
+  display: inline-block;
+}
+.capital::first-letter,
+.encabezado-vista .fecha::first-letter,
+.cal-cabecera .mes::first-letter { text-transform: uppercase; }
+
+/* ───────── Tarjetas ───────── */
+
+.tarjeta {
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 16px;
+  margin-bottom: 14px;
+}
+.tarjeta.sin-borde { border-color: transparent; }
+.tarjeta h2, .tarjeta h3 { margin-bottom: 10px; }
+
+.tarjeta-titulo {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.tarjeta-titulo h2, .tarjeta-titulo h3 { margin: 0; }
+
+/* Tarjeta plegable: el detalle está, pero no estorba.
+   Lo primero que ves es el número; la cuenta completa, a un toque. */
+.desglose > summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  /* Sin el triangulito del navegador: ya decimos "ver la cuenta" */
+  list-style: none;
+  /* Área de toque cómoda para el pulgar */
+  padding: 2px 0;
+  min-height: 32px;
+}
+.desglose > summary::-webkit-details-marker { display: none; }
+.desglose[open] > summary { margin-bottom: 4px; }
+
+/* El número grande de "cuánto puedo gastar hoy" */
+.monto-gigante {
+  font-size: 56px;
+  font-weight: 700;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  margin: 6px 0 2px;
+  font-variant-numeric: tabular-nums;
+}
+.etiqueta-arriba {
+  font-size: 15px;
+  color: var(--texto-suave);
+  margin: 0;
+}
+.nota-abajo {
+  font-size: 14px;
+  color: var(--texto-suave);
+  margin: 8px 0 0;
+}
+
+/* Colores de estado del límite diario */
+.estado-bien   { color: var(--bien); }
+.estado-aviso  { color: var(--aviso); }
+.estado-limite { color: var(--limite); }
+
+.tarjeta.borde-bien   { border-color: var(--bien);   background: var(--bien-fondo); }
+.tarjeta.borde-aviso  { border-color: var(--aviso);  background: var(--aviso-fondo); }
+.tarjeta.borde-limite { border-color: var(--limite); background: var(--limite-fondo); }
+
+/* ───────── Barras de progreso ───────── */
+
+.barra {
+  height: 10px;
+  background: var(--superficie-2);
+  border-radius: 99px;
+  overflow: hidden;
+  margin: 10px 0 6px;
+}
+.barra > i {
+  display: block;
+  height: 100%;
+  border-radius: 99px;
+  background: var(--bien);
+  transition: width .35s ease;
+}
+.barra.aviso  > i { background: var(--aviso); }
+.barra.limite > i { background: var(--limite); }
+
+/* ───────── Botones ───────── */
+
+button {
+  font: inherit;
+  color: inherit;
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+
+.boton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  min-height: var(--toque);
+  padding: 14px 18px;
+  border-radius: var(--radio);
+  background: var(--superficie-2);
+  border: 1px solid var(--borde);
+  font-size: 17px;
+  font-weight: 600;
+  text-align: center;
+}
+.boton:active { transform: scale(.985); }
+
+.boton.principal {
+  background: var(--acento);
+  color: #0e1a22;
+  border-color: transparent;
+}
+.boton.suave { background: transparent; }
+.boton.tenue { color: var(--texto-suave); border-color: transparent; background: transparent; font-weight: 500; }
+.boton.chico { min-height: 44px; padding: 10px 14px; font-size: 15px; border-radius: var(--radio-chico); }
+.boton.logro { background: var(--bien); color: #0e1a22; border-color: transparent; }
+
+.fila-botones { display: flex; gap: 10px; }
+.fila-botones > .boton { flex: 1; }
+
+/* Botón "+" flotante. A la derecha para no taparle nada al contenido
+   y quedar al alcance del pulgar. */
+.boton-mas {
+  position: fixed;
+  right: 16px;
+  bottom: calc(var(--seguro-abajo) + 74px);
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: var(--acento);
+  color: #0e1a22;
+  font-size: 34px;
+  font-weight: 400;
+  line-height: 1;
+  box-shadow: 0 8px 24px rgba(0,0,0,.45);
+  z-index: 30;
+}
+.boton-mas:active { transform: scale(.94); }
+
+/* ───────── Barra inferior ───────── */
+
+.barra-inferior {
+  position: fixed;
+  bottom: 0; left: 0; right: 0;
+  display: flex;
+  /* Semitransparente para que el contenido se intuya al pasar por debajo.
+     Como variable, porque en tema claro tiene que ser el fondo claro. */
+  background: var(--barra-fondo, rgba(18, 26, 31, .94));
+  backdrop-filter: blur(14px);
+  border-top: 1px solid var(--borde);
+  padding: 6px 4px calc(var(--seguro-abajo) + 6px);
+  z-index: 20;
+}
+.pestania {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: 6px 2px;
+  font-size: 11px;
+  color: var(--texto-suave);
+  min-height: 52px;
+}
+.pestania span { font-size: 21px; line-height: 1; filter: grayscale(.55) opacity(.75); }
+.pestania.activa { color: var(--acento); }
+.pestania.activa span { filter: none; }
+
+/* ───────── Listas ───────── */
+
+.lista { display: flex; flex-direction: column; gap: 10px; }
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-chico);
+  padding: 12px 14px;
+  min-height: var(--toque);
+  text-align: left;
+  width: 100%;
+}
+.item.hecho { opacity: .5; }
+.item.hecho .item-titulo { text-decoration: line-through; }
+.item-cuerpo { flex: 1; min-width: 0; }
+.item-titulo { font-weight: 600; font-size: 16px; }
+.item-sub { font-size: 13px; color: var(--texto-suave); }
+.item-monto { font-weight: 650; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.item-alta { box-shadow: inset 3px 0 0 var(--aviso); }
+
+/* Casilla grande y fácil de tocar */
+.casilla {
+  width: 30px; height: 30px;
+  flex: 0 0 30px;
+  border-radius: 9px;
+  border: 2px solid var(--borde);
+  display: grid;
+  place-items: center;
+  font-size: 16px;
+  color: var(--bien);
+  background: var(--superficie-2);
+}
+.casilla.marcada { background: var(--bien); border-color: var(--bien); color: #0e1a22; }
+
+.vacio {
+  text-align: center;
+  color: var(--texto-suave);
+  padding: 26px 10px;
+  font-size: 15px;
+}
+
+/* Etiquetas pequeñas */
+.pastilla {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 600;
+  background: var(--superficie-2);
+  color: var(--texto-suave);
+}
+.pastilla.acento { background: var(--acento-fondo); color: var(--acento); }
+.pastilla.bien   { background: var(--bien-fondo);   color: var(--bien); }
+.pastilla.aviso  { background: var(--aviso-fondo);  color: var(--aviso); }
+.pastilla.limite { background: var(--limite-fondo); color: var(--limite); }
+
+/* ───────── Formularios ───────── */
+
+label.campo { display: block; margin-bottom: 14px; }
+label.campo > span {
+  display: block;
+  font-size: 14px;
+  color: var(--texto-suave);
+  margin-bottom: 6px;
+}
+
+input, select, textarea {
+  width: 100%;
+  min-height: var(--toque);
+  padding: 13px 14px;
+  font: inherit;
+  font-size: 17px;              /* 17px evita que iOS haga zoom al enfocar */
+  color: var(--texto);
+  background: var(--superficie-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio-chico);
+  appearance: none;
+}
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid var(--acento);
+  outline-offset: 1px;
+}
+textarea { min-height: 80px; resize: vertical; }
+
+/* Monto grande en los formularios de dinero */
+input.monto-entrada {
+  font-size: 40px;
+  font-weight: 700;
+  text-align: center;
+  padding: 16px 10px;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Selector de opciones en forma de pastillas tocables */
+.opciones { display: flex; flex-wrap: wrap; gap: 8px; }
+.opcion {
+  padding: 12px 16px;
+  border-radius: var(--radio-chico);
+  background: var(--superficie-2);
+  border: 1px solid var(--borde);
+  font-size: 15px;
+  font-weight: 600;
+  min-height: 48px;
+}
+.opcion.elegida { background: var(--acento); color: #0e1a22; border-color: transparent; }
+
+.fila-interruptor {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--borde);
+}
+.fila-interruptor:last-child { border-bottom: none; }
+.fila-interruptor .texto { flex: 1; }
+.fila-interruptor .texto small { display: block; color: var(--texto-suave); font-size: 13px; }
+
+/* Interruptor estilo iOS */
+.interruptor {
+  position: relative;
+  width: 52px; height: 32px;
+  flex: 0 0 52px;
+  border-radius: 99px;
+  background: var(--superficie-2);
+  border: 1px solid var(--borde);
+  transition: background .2s;
+}
+.interruptor::after {
+  content: "";
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--texto-suave);
+  transition: transform .2s, background .2s;
+}
+.interruptor.encendido { background: var(--bien); border-color: transparent; }
+.interruptor.encendido::after { transform: translateX(20px); background: #0e1a22; }
+
+/* ───────── Hoja inferior (todos los formularios) ───────── */
+
+.hoja-fondo {
+  position: fixed;
+  inset: 0;
+  background: rgba(8,12,15,.6);
+  backdrop-filter: blur(3px);
+  z-index: 40;
+}
+.hoja {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 50;
+  background: var(--superficie);
+  border-top-left-radius: 26px;
+  border-top-right-radius: 26px;
+  padding: 10px 16px calc(var(--seguro-abajo) + 20px);
+  max-height: 92svh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  animation: subir .26s cubic-bezier(.2,.8,.2,1);
+}
+@keyframes subir { from { transform: translateY(100%); } to { transform: translateY(0); } }
+.hoja-asa {
+  width: 44px; height: 5px;
+  background: var(--borde);
+  border-radius: 99px;
+  margin: 4px auto 14px;
+}
+.hoja-titulo { font-size: 21px; margin-bottom: 16px; }
+
+/* ───────── Aviso flotante amable ───────── */
+
+.brindis {
+  position: fixed;
+  left: 16px; right: 16px;
+  bottom: calc(var(--seguro-abajo) + 150px);
+  z-index: 60;
+  background: var(--superficie-2);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 14px 16px;
+  text-align: center;
+  font-size: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.4);
+  animation: subir .22s ease;
+}
+.brindis.bien   { background: var(--bien-fondo);   border-color: var(--bien); }
+.brindis.aviso  { background: var(--aviso-fondo);  border-color: var(--aviso); }
+.brindis.limite { background: var(--limite-fondo); border-color: var(--limite); }
+
+/* ───────── Animación de bienvenida ─────────
+   Tranquila a propósito: nada rebota ni parpadea. Es el gesto de
+   "respira" antes de ver los números, no un logo saltando. */
+
+.intro {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  background: var(--fondo);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: 0 28px;
+  text-align: center;
+  /* La salida la pone el JS cambiando esta opacidad */
+  opacity: 1;
+  transition: opacity .45s ease;
+}
+.intro.yendose { opacity: 0; }
+
+/* La escena de la gota: cae, toca el agua, se abre en onda y de ahí
+   sale el nombre. Toda la animación vive dentro de esta caja. */
+.intro-escena {
+  position: relative;
+  width: 100%;
+  max-width: 260px;
+  height: 190px;
+}
+
+/* La gota. El truco del lagrimón: una esquina en punta y girado 45°. */
+.intro-gota {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 18px;
+  height: 18px;
+  margin-left: -9px;
+  background: var(--acento);
+  border-radius: 0 50% 50% 50%;
+  transform: rotate(45deg);
+  animation: gota-cae 1s cubic-bezier(.45, 0, .75, .35) both;
+}
+
+/* Las ondas que deja al caer. Dos, con un pelo de diferencia. */
+.intro-onda {
+  position: absolute;
+  left: 50%;
+  /* La "superficie del agua". El nombre sale por debajo. */
+  top: 100px;
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid var(--acento);
+  border-radius: 50%;
+  opacity: 0;
+  /* Se apagan antes de que el nombre termine de asentarse, para que no
+     quede un aro encima de la palabra. */
+  animation: onda-abre 1s ease-out 1s both;
+}
+.intro-onda.dos { animation-delay: 1.15s; }
+
+.intro-nombre {
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 150px;
+  font-size: 34px;
+  font-weight: 300;
+  /* Las letras separadas se leen más calmadas */
+  letter-spacing: .22em;
+  padding-left: .22em;
+  animation: nombre-emerge 1.1s cubic-bezier(.2, .8, .3, 1) 1.4s both;
+}
+
+.intro-frase {
+  color: var(--texto-suave);
+  font-size: 15px;
+  line-height: 1.5;
+  max-width: 300px;
+  margin-top: 8px;
+  min-height: 44px;
+  animation: intro-sube .8s ease-out 1.9s both;
+}
+
+@keyframes gota-cae {
+  0%   { opacity: 0; transform: translateY(-24px) rotate(45deg) scale(.6); }
+  18%  { opacity: 1; }
+  /* Se estira un poco justo antes de tocar: así se lee como una gota */
+  85%  { opacity: 1; transform: translateY(92px) rotate(45deg) scaleY(1.25) scaleX(.85); }
+  100% { opacity: 0; transform: translateY(100px) rotate(45deg) scaleY(.5) scaleX(1.5); }
+}
+
+@keyframes onda-abre {
+  0%   { opacity: .85; transform: scale(.3); }
+  60%  { opacity: .3; }
+  100% { opacity: 0; transform: scale(4.2); }
+}
+
+/* El nombre sale del agua: sube, se enfoca y se asienta. */
+@keyframes nombre-emerge {
+  0%   { opacity: 0; transform: translateY(16px) scale(.94); filter: blur(6px); }
+  55%  { opacity: 1; filter: blur(0); }
+  100% { opacity: 1; transform: translateY(0) scale(1); filter: blur(0); }
+}
+
+@keyframes intro-sube {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Si pediste menos movimiento en iOS, el nombre solo aparece. */
+@media (prefers-reduced-motion: reduce) {
+  .intro-gota, .intro-onda { display: none; }
+  .intro-nombre, .intro-frase { animation: intro-sube .01s linear both; }
+}
+
+/* ───────── Pantallas completas: PIN y bienvenida ───────── */
+
+.pantalla-completa {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: var(--fondo);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: calc(var(--seguro-arriba) + 20px) 22px calc(var(--seguro-abajo) + 20px);
+  overflow-y: auto;
+}
+
+.pin-caja { max-width: 340px; margin: 0 auto; width: 100%; text-align: center; }
+.pin-logo { font-size: 42px; margin-bottom: 10px; }
+.pin-titulo { font-size: 24px; margin-bottom: 4px; }
+.pin-ayuda { color: var(--texto-suave); font-size: 15px; min-height: 22px; }
+
+.pin-puntos { display: flex; gap: 16px; justify-content: center; margin: 24px 0 30px; }
+.pin-puntos span {
+  width: 14px; height: 14px;
+  border-radius: 50%;
+  border: 2px solid var(--borde);
+  transition: background .15s, border-color .15s;
+}
+.pin-puntos span.lleno { background: var(--acento); border-color: var(--acento); }
+
+.teclado {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+}
+.tecla {
+  height: 72px;
+  border-radius: 50%;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  font-size: 26px;
+  font-weight: 500;
+}
+.tecla:active { background: var(--superficie-2); }
+.tecla-vacia { background: none; border: none; }
+
+/* ───────── Conversación (bienvenida y chat) ───────── */
+
+.charla { display: flex; flex-direction: column; gap: 12px; }
+
+.burbuja {
+  max-width: 86%;
+  padding: 12px 15px;
+  border-radius: 18px;
+  line-height: 1.55;
+  font-size: 15.5px;
+  white-space: pre-wrap;
+  background: var(--superficie);
+  border: 1px solid var(--borde);
+  align-self: flex-start;
+  /* Entran de a poco, como si las estuviera escribiendo */
+  animation: burbuja-entra .32s ease-out both;
+}
+.burbuja.mia {
+  align-self: flex-end;
+  background: var(--acento);
+  color: #0e1a22;
+  border-color: transparent;
+}
+
+@keyframes burbuja-entra {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Los tres puntitos de "estoy escribiendo" */
+.escribiendo { display: flex; gap: 5px; align-items: center; padding: 4px 2px; }
+.escribiendo i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--texto-suave);
+  opacity: .4;
+  animation: punto 1.1s ease-in-out infinite;
+}
+.escribiendo i:nth-child(2) { animation-delay: .15s; }
+.escribiendo i:nth-child(3) { animation-delay: .3s; }
+
+@keyframes punto {
+  0%, 60%, 100% { opacity: .25; transform: translateY(0); }
+  30%           { opacity: .9;  transform: translateY(-3px); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .burbuja { animation: none; }
+  .escribiendo i { animation: none; opacity: .5; }
+}
+
+/* La conversación de bienvenida ocupa toda la pantalla y crece hacia abajo */
+.charla-guiada {
+  max-width: 460px;
+  margin: 0 auto;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  /* El contenido se pega abajo, junto a los botones de respuesta */
+  min-height: 100%;
+  justify-content: flex-end;
+}
+
+/* Pasos del asistente */
+.paso { max-width: 420px; margin: 0 auto; width: 100%; }
+.paso-puntos { display: flex; gap: 7px; justify-content: center; margin-bottom: 26px; }
+.paso-puntos i {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--borde);
+}
+.paso-puntos i.activo { background: var(--acento); width: 20px; border-radius: 99px; }
+.paso h1 { margin-bottom: 8px; }
+.paso .intro { color: var(--texto-suave); margin-bottom: 24px; }
+.paso-acciones { margin-top: 24px; display: flex; flex-direction: column; gap: 10px; }
+
+/* ───────── Calendario simple ───────── */
+
+.cal-cabecera {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+.cal-cabecera .mes { font-weight: 650; }
+.cal-flecha {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: var(--superficie-2);
+  font-size: 18px;
+}
+.cal-rejilla { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+.cal-dia-nombre {
+  text-align: center;
+  font-size: 11px;
+  color: var(--texto-suave);
+  padding-bottom: 4px;
+}
+.cal-dia {
+  aspect-ratio: 1;
+  border-radius: 10px;
+  background: var(--superficie);
+  border: 1px solid transparent;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  font-size: 14px;
+}
+.cal-dia.fuera { opacity: .3; }
+.cal-dia.hoy { border-color: var(--acento); color: var(--acento); font-weight: 700; }
+.cal-dia.elegido { background: var(--acento); color: #0e1a22; font-weight: 700; }
+.cal-punto { width: 5px; height: 5px; border-radius: 50%; background: var(--acento); }
+.cal-dia.elegido .cal-punto { background: #0e1a22; }
+
+/* ───────── Modo día difícil ───────── */
+
+.dificil .barra-inferior,
+.dificil .boton-mas { opacity: .45; }
+
+.tarjeta-dificil {
+  background: linear-gradient(160deg, #1e2a33, #1a232b);
+  border: 1px solid var(--acento);
+  border-radius: var(--radio);
+  padding: 26px 20px;
+  text-align: center;
+  margin-bottom: 14px;
+}
+.tarjeta-dificil .luna { font-size: 40px; margin-bottom: 10px; }
+.tarjeta-dificil .mensaje { font-size: 18px; line-height: 1.5; }
+
+/* Barra de accesos rápidos */
+.accesos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+
+/* Texto auxiliar */
+.ayuda { font-size: 13px; color: var(--texto-suave); margin: -4px 0 14px; }
+
+hr.sep { border: none; border-top: 1px solid var(--borde); margin: 20px 0; }
+
+/* Menos animación si el sistema lo pide */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}

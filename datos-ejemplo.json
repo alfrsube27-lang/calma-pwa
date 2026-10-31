@@ -1,0 +1,174 @@
+{
+  "version": 1,
+  "configurado": true,
+  "_comentario": "Datos de prueba de Calma. Importar desde Ajustes → Respaldo → Pegar un respaldo. El PIN no viene incluido: la app te pedirá crear uno.",
+  "pin": { "hash": null, "sal": null },
+
+  "ajustes": {
+    "nombre": "Alex",
+    "diasMaximos": 45,
+    "montoPago": 1800,
+    "ultimoPago": "2026-10-10",
+    "saldoArrastrado": 700,
+
+    "comidaPorDia": 18,
+    "recordarComida": true,
+    "horasComida": ["08:00", "13:30", "19:30"],
+
+    "notificaciones": false,
+    "horaDeudas": "09:00",
+    "avisoReunionMin": 30,
+    "resumenDia": 0,
+    "resumenHora": "19:00",
+
+    "estrategia": "bola",
+
+    "metaEmergencia": 500,
+    "ahorroEmergencia": 60,
+
+    "tareaMinima": "Tomar agua",
+    "dificilHasta": null,
+
+    "apiUrl": "",
+    "token": ""
+  },
+
+  "categorias": [
+    { "id": "comida",     "nombre": "Comida",     "emoji": "🍚", "tipo": "gasto" },
+    { "id": "transporte", "nombre": "Transporte", "emoji": "🚌", "tipo": "gasto" },
+    { "id": "deudas",     "nombre": "Deudas",     "emoji": "🧾", "tipo": "gasto" },
+    { "id": "gustos",     "nombre": "Gustos",     "emoji": "🎁", "tipo": "gasto" },
+    { "id": "otros",      "nombre": "Otros",      "emoji": "📦", "tipo": "gasto" },
+    { "id": "salud",      "nombre": "Salud",      "emoji": "💊", "tipo": "gasto" },
+    { "id": "pago",       "nombre": "Pago",       "emoji": "💰", "tipo": "ingreso" },
+    { "id": "extra",      "nombre": "Extra",      "emoji": "✨", "tipo": "ingreso" }
+  ],
+
+  "movimientos": [
+    { "id": "m01", "tipo": "gasto",   "monto": 12.5, "categoria": "comida",     "nota": "Menú del día",      "fecha": "2026-10-26", "hora": "13:40", "creado": 1761500000000 },
+    { "id": "m02", "tipo": "gasto",   "monto": 5,    "categoria": "transporte", "nota": "Micro",             "fecha": "2026-10-26", "hora": "08:15", "creado": 1761499000000 },
+    { "id": "m03", "tipo": "gasto",   "monto": 22,   "categoria": "gustos",     "nota": "Café con Ana",      "fecha": "2026-10-25", "hora": "17:20", "creado": 1761420000000 },
+    { "id": "m04", "tipo": "gasto",   "monto": 16,   "categoria": "comida",     "nota": "Mercado",           "fecha": "2026-10-25", "hora": "11:00", "creado": 1761410000000 },
+    { "id": "m05", "tipo": "gasto",   "monto": 180,  "categoria": "deudas",     "nota": "Cuota · Banco Azul","fecha": "2026-10-24", "hora": "09:30", "creado": 1761330000000, "fuente": "deuda" },
+    { "id": "m06", "tipo": "gasto",   "monto": 35,   "categoria": "salud",      "nota": "Pastillas",         "fecha": "2026-10-23", "hora": "16:05", "creado": 1761250000000 },
+    { "id": "m07", "tipo": "gasto",   "monto": 14,   "categoria": "comida",     "nota": "",                  "fecha": "2026-10-23", "hora": "13:10", "creado": 1761245000000 },
+    { "id": "m08", "tipo": "ingreso", "monto": 150,  "categoria": "extra",      "nota": "Trabajito extra",   "fecha": "2026-10-22", "hora": "19:00", "creado": 1761170000000 },
+    { "id": "m09", "tipo": "gasto",   "monto": 60,   "categoria": "gustos",     "nota": "Zapatillas usadas", "fecha": "2026-10-21", "hora": "15:30", "creado": 1761080000000 },
+    { "id": "m10", "tipo": "gasto",   "monto": 17,   "categoria": "comida",     "nota": "",                  "fecha": "2026-10-21", "hora": "12:50", "creado": 1761075000000 },
+    { "id": "m11", "tipo": "gasto",   "monto": 8,    "categoria": "transporte", "nota": "",                  "fecha": "2026-10-20", "hora": "08:05", "creado": 1760990000000 },
+    { "id": "m12", "tipo": "gasto",   "monto": 95,   "categoria": "otros",      "nota": "Celular",           "fecha": "2026-10-15", "hora": "10:00", "creado": 1760550000000, "fuente": "fijo" },
+    { "id": "m13", "tipo": "gasto",   "monto": 120,  "categoria": "deudas",     "nota": "Cuota · Mi hermana","fecha": "2026-10-12", "hora": "11:20", "creado": 1760280000000, "fuente": "deuda" },
+    { "id": "m14", "tipo": "ingreso", "monto": 1800, "categoria": "pago",       "nota": "Pago recibido",     "fecha": "2026-10-10", "hora": "12:00", "creado": 1760110000000 }
+  ],
+
+  "gastosFijos": [
+    { "id": "f01", "nombre": "Alquiler",  "monto": 450, "dia": 5,  "pagados": ["2026-10"] },
+    { "id": "f02", "nombre": "Celular",   "monto": 95,  "dia": 15, "pagados": ["2026-10"] },
+    { "id": "f03", "nombre": "Internet",  "monto": 89,  "dia": 28, "pagados": [] }
+  ],
+
+  "deudas": [
+    {
+      "id": "d01", "acreedor": "Mi hermana", "total": 600, "saldo": 240,
+      "cuota": 120, "diaPago": 12, "interes": 0, "creada": "2026-06-12",
+      "terminada": false, "celebrada": false,
+      "pagos": [
+        { "id": "p01", "monto": 120, "fecha": "2026-08-12" },
+        { "id": "p02", "monto": 120, "fecha": "2026-09-12" },
+        { "id": "p03", "monto": 120, "fecha": "2026-10-12" }
+      ]
+    },
+    {
+      "id": "d02", "acreedor": "Banco Azul", "total": 2400, "saldo": 1680,
+      "cuota": 180, "diaPago": 24, "interes": 38, "creada": "2026-04-24",
+      "terminada": false, "celebrada": false,
+      "pagos": [
+        { "id": "p04", "monto": 180, "fecha": "2026-08-24" },
+        { "id": "p05", "monto": 180, "fecha": "2026-09-24" },
+        { "id": "p06", "monto": 180, "fecha": "2026-10-24" }
+      ]
+    },
+    {
+      "id": "d03", "acreedor": "Tienda Mueblería", "total": 800, "saldo": 0,
+      "cuota": 100, "diaPago": 20, "interes": 0, "creada": "2026-01-20",
+      "terminada": true, "celebrada": true,
+      "pagos": [
+        { "id": "p07", "monto": 400, "fecha": "2026-08-20" },
+        { "id": "p08", "monto": 400, "fecha": "2026-09-20" }
+      ]
+    }
+  ],
+
+  "pendientes": [
+    {
+      "id": "t01", "tipo": "tarea", "titulo": "Llamar al banco por la cuota",
+      "fecha": "2026-10-26", "hora": "10:00", "duracion": 0, "lugar": "",
+      "prioridad": "alta", "notificar": true, "avisoMin": 0,
+      "repetir": { "tipo": "no", "dias": [] },
+      "subtareas": [
+        { "id": "s01", "titulo": "Buscar el número en el recibo", "hecha": true },
+        { "id": "s02", "titulo": "Anotar lo que quiero preguntar", "hecha": false },
+        { "id": "s03", "titulo": "Llamar", "hecha": false }
+      ],
+      "hechas": [], "hecha": false, "hechaEn": null, "arrastres": 1, "creado": 1761300000000
+    },
+    {
+      "id": "t02", "tipo": "reunion", "titulo": "Control con la psicóloga",
+      "fecha": "2026-10-28", "hora": "16:00", "duracion": 50, "lugar": "Zoom",
+      "prioridad": "alta", "notificar": true, "avisoMin": 30,
+      "repetir": { "tipo": "no", "dias": [] },
+      "subtareas": [], "hechas": [], "hecha": false, "hechaEn": null,
+      "arrastres": 0, "creado": 1761200000000
+    },
+    {
+      "id": "t03", "tipo": "casa", "titulo": "Lavar la ropa",
+      "fecha": "2026-10-27", "hora": "", "duracion": 0, "lugar": "",
+      "prioridad": "normal", "notificar": false, "avisoMin": 0,
+      "repetir": { "tipo": "dias", "dias": [2, 6] },
+      "subtareas": [], "hechas": [], "hecha": false, "hechaEn": null,
+      "arrastres": 0, "creado": 1761100000000
+    },
+    {
+      "id": "t04", "tipo": "pago", "titulo": "Pagar el internet",
+      "fecha": "2026-10-28", "hora": "09:00", "duracion": 0, "lugar": "",
+      "prioridad": "normal", "notificar": true, "avisoMin": 0,
+      "repetir": { "tipo": "mensual", "dias": [] },
+      "subtareas": [], "hechas": [], "hecha": false, "hechaEn": null,
+      "arrastres": 0, "creado": 1761000000000
+    },
+    {
+      "id": "t05", "tipo": "tarea", "titulo": "Comprar arroz y huevos",
+      "fecha": "2026-10-26", "hora": "", "duracion": 0, "lugar": "",
+      "prioridad": "normal", "notificar": false, "avisoMin": 0,
+      "repetir": { "tipo": "no", "dias": [] },
+      "subtareas": [], "hechas": [], "hecha": false, "hechaEn": null,
+      "arrastres": 0, "creado": 1761480000000
+    },
+    {
+      "id": "t06", "tipo": "otro", "titulo": "Salir a caminar 10 minutos",
+      "fecha": "2026-10-20", "hora": "18:00", "duracion": 0, "lugar": "",
+      "prioridad": "normal", "notificar": true, "avisoMin": 0,
+      "repetir": { "tipo": "diaria", "dias": [] },
+      "subtareas": [],
+      "hechas": ["2026-10-22", "2026-10-23", "2026-10-25"],
+      "hecha": false, "hechaEn": null, "arrastres": 0, "creado": 1760900000000
+    }
+  ],
+
+  "rutinas": [
+    { "id": "r01", "titulo": "Tender la cama",      "activa": true, "hechas": ["2026-10-24", "2026-10-25", "2026-10-26"] },
+    { "id": "r02", "titulo": "Lavar los platos",    "activa": true, "hechas": ["2026-10-25"] },
+    { "id": "r03", "titulo": "Tomar mis pastillas", "activa": true, "hechas": ["2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26"] }
+  ],
+
+  "diasActivos": [
+    "2026-10-18", "2026-10-20", "2026-10-21", "2026-10-22",
+    "2026-10-23", "2026-10-24", "2026-10-25", "2026-10-26"
+  ],
+  "diasDificiles": ["2026-10-19"],
+  "avisosDados": {},
+  "logros": [
+    { "id": "l01", "texto": "Terminaste de pagar Tienda Mueblería", "fecha": "2026-09-20" },
+    { "id": "l02", "texto": "Una semana entera registrando tus gastos", "fecha": "2026-10-25" }
+  ]
+}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<!-- Ancho fijo al del dispositivo, sin zoom accidental, respetando el notch del iPhone -->
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
+<!-- La app es privada: que ningún buscador la indexe -->
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="referrer" content="no-referrer">
+<title>Calma</title>
+
+<!-- iOS: que se vea como app al "Agregar a pantalla de inicio" -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Calma">
+<meta name="theme-color" content="#121a1f">
+
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="iconos/apple-touch-icon.png">
+<link rel="icon" href="iconos/icono-192.png">
+<link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+<!-- ───────── Animación de bienvenida ─────────
+     Tapa el momento en que la app está armando la pantalla.
+     Larga la primera vez; un parpadeo las demás. -->
+<section id="pantalla-intro" class="intro oculto" aria-hidden="true"></section>
+
+<!-- ───────── Pantalla de bloqueo con PIN ───────── -->
+<section id="pantalla-pin" class="pantalla-completa oculto">
+  <div class="pin-caja">
+    <div class="pin-logo" aria-hidden="true">🌙</div>
+    <h1 id="pin-titulo" class="pin-titulo">Hola</h1>
+    <p id="pin-ayuda" class="pin-ayuda">Ingresa tu PIN</p>
+    <div class="pin-puntos" id="pin-puntos" role="status" aria-live="polite">
+      <span></span><span></span><span></span><span></span>
+    </div>
+    <div class="teclado" id="teclado-pin">
+      <button class="tecla" data-tecla="1">1</button>
+      <button class="tecla" data-tecla="2">2</button>
+      <button class="tecla" data-tecla="3">3</button>
+      <button class="tecla" data-tecla="4">4</button>
+      <button class="tecla" data-tecla="5">5</button>
+      <button class="tecla" data-tecla="6">6</button>
+      <button class="tecla" data-tecla="7">7</button>
+      <button class="tecla" data-tecla="8">8</button>
+      <button class="tecla" data-tecla="9">9</button>
+      <button class="tecla tecla-vacia" disabled></button>
+      <button class="tecla" data-tecla="0">0</button>
+      <button class="tecla" data-tecla="borrar" aria-label="Borrar">⌫</button>
+    </div>
+  </div>
+</section>
+
+<!-- ───────── Asistente de primer uso ───────── -->
+<section id="pantalla-bienvenida" class="pantalla-completa oculto"></section>
+
+<!-- ───────── App ───────── -->
+<div id="app" class="oculto">
+  <main id="contenido" class="contenido" tabindex="-1"></main>
+
+  <!-- Botón grande para registrar cualquier cosa en 2 toques -->
+  <button id="boton-mas" class="boton-mas" aria-label="Registrar algo">+</button>
+
+  <nav class="barra-inferior" aria-label="Secciones">
+    <button class="pestania" data-vista="hoy"><span aria-hidden="true">☀️</span>Hoy</button>
+    <button class="pestania" data-vista="dinero"><span aria-hidden="true">💵</span>Dinero</button>
+    <button class="pestania" data-vista="deudas"><span aria-hidden="true">🧾</span>Deudas</button>
+    <button class="pestania" data-vista="agenda"><span aria-hidden="true">🗓️</span>Agenda</button>
+    <button class="pestania" data-vista="chat"><span aria-hidden="true">💬</span>Hablar</button>
+    <button class="pestania" data-vista="resumen"><span aria-hidden="true">🌱</span>Ti</button>
+  </nav>
+</div>
+
+<!-- Hoja inferior reutilizable para todos los formularios -->
+<div id="hoja-fondo" class="hoja-fondo oculto"></div>
+<section id="hoja" class="hoja oculto" role="dialog" aria-modal="true" aria-labelledby="hoja-titulo">
+  <div class="hoja-asa" aria-hidden="true"></div>
+  <h2 id="hoja-titulo" class="hoja-titulo"></h2>
+  <div id="hoja-cuerpo"></div>
+</section>
+
+<!-- Avisos amables, nunca modales de error -->
+<div id="brindis" class="brindis oculto" role="status" aria-live="polite"></div>
+
+<script src="js/util.js"></script>
+<script src="js/almacen.js"></script>
+<script src="js/calculo.js"></script>
+<script src="js/aprendiz.js"></script>
+<script src="js/plan.js"></script>
+<script src="js/mente.js"></script>
+<script src="js/apariencia.js"></script>
+<script src="js/api.js"></script>
+<script src="js/notificaciones.js"></script>
+<script src="js/vistas/bienvenida.js"></script>
+<script src="js/vistas/hoy.js"></script>
+<script src="js/vistas/accion.js"></script>
+<script src="js/vistas/dinero.js"></script>
+<script src="js/vistas/deudas.js"></script>
+<script src="js/vistas/agenda.js"></script>
+<script src="js/vistas/chat.js"></script>
+<script src="js/vistas/resumen.js"></script>
+<script src="js/vistas/ajustes.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
