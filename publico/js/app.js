@@ -588,7 +588,7 @@ const App = (() => {
      Antes de lanzar la app al público: quitar `limpiarSiHayVersionNueva()`
      de `iniciar()`. Si no, cada actualización le borraría a la gente
      sus deudas y su agenda. */
-  const VERSION_APP = 'calma-v6';
+  const VERSION_APP = 'calma-v7';
   const CLAVE_VERSION = 'calma.version';
 
   function limpiarSiHayVersionNueva() {

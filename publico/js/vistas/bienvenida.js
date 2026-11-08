@@ -302,7 +302,9 @@ const Bienvenida = (() => {
           burbuja(o.eco ? o.eco(valor) : String(valor), true);
           U.vibrar(10);
         } else {
-          burbuja(o.textoSaltar === 'Ya está' ? 'Ya está' : 'Eso lo veo después', true);
+          // Tu burbuja dice lo mismo que el botón que tocaste, no una
+          // frase genérica: así la conversación se lee como tuya.
+          burbuja(o.textoSaltar, true);
         }
         nuevaZona();
         resolver({ valor, saltado });
@@ -317,8 +319,13 @@ const Bienvenida = (() => {
         const campo = zona.querySelector('#bv-campo');
         const mandar = () => {
           const v = campo.value;
-          if (v === '' || (o.tipo === 'numero' && U.numero(v) <= 0)) {
-            App.brindis(o.saltable ? 'Escribe algo, o toca el botón de abajo.' : 'Escribe algo.');
+          const vacio = v === '' || (o.tipo === 'numero' && U.numero(v) <= 0);
+          if (vacio) {
+            // Dar "Listo" sin escribir nada es decir "esta me la salto".
+            // Regañar por un campo vacío sería pelear con la persona por
+            // algo que ya se puede saltar con el botón de abajo.
+            if (o.saltable) { terminar(null, true); return; }
+            App.brindis('Escribe algo para poder seguir.');
             return;
           }
           terminar(v, false);

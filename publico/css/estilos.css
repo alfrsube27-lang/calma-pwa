@@ -475,7 +475,10 @@ input.monto-entrada {
   position: fixed;
   left: 16px; right: 16px;
   bottom: calc(var(--seguro-abajo) + 150px);
-  z-index: 60;
+  /* Por encima de TODO lo que tape la pantalla: el PIN y la entrada
+     estan en 100, la hoja en 40-50, la intro en 300. Si el aviso
+     queda debajo, la app te habla donde no puedes verla. */
+  z-index: 320;
   background: var(--superficie-2);
   border: 1px solid var(--borde);
   border-radius: var(--radio);
