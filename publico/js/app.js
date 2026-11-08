@@ -574,7 +574,42 @@ const App = (() => {
     });
   }
 
+  /* ───────── VERSIÓN Y ARRANQUE LIMPIO ─────────
+     Mientras la app se está construyendo, cada versión nueva empieza
+     de cero: se borra lo guardado y se entra como la primera vez.
+
+     No hay botón ni ajuste. Se dispara sola al detectar que el número
+     de abajo cambió desde la última apertura, que es justo cuando hay
+     algo nuevo que probar.
+
+     ⚠️ Al publicar una versión hay que subir este número Y el de
+     `sw.js`. Los dos: este borra los datos, aquel borra la caché.
+
+     Antes de lanzar la app al público: quitar `limpiarSiHayVersionNueva()`
+     de `iniciar()`. Si no, cada actualización le borraría a la gente
+     sus deudas y su agenda. */
+  const VERSION_APP = 'calma-v6';
+  const CLAVE_VERSION = 'calma.version';
+
+  function limpiarSiHayVersionNueva() {
+    let anterior = null;
+    try { anterior = localStorage.getItem(CLAVE_VERSION); } catch (e) { return; }
+    if (anterior === VERSION_APP) return;
+
+    try {
+      localStorage.removeItem('calma.estado.v1');
+      localStorage.setItem(CLAVE_VERSION, VERSION_APP);
+    } catch (e) {}
+
+    console.info(anterior
+      ? `Calma ${VERSION_APP}: versión nueva, empezamos de cero.`
+      : `Calma ${VERSION_APP}: primera vez.`);
+  }
+
   async function iniciar() {
+    // Antes de cargar nada: si hay versión nueva, borrón y cuenta nueva
+    limpiarSiHayVersionNueva();
+
     Almacen.cargar();
 
     // La app se pinta como la dejó: tema, acento y pestañas visibles.
@@ -630,6 +665,7 @@ const App = (() => {
     iniciar, ir, pintar, abrirHoja, cerrarHoja, brindis, confirmar, intro,
     menuMas, mostrarPin, cambiarPin, bloquear, entrarApp, ponerseAlDia,
     CONSTRUCCION, PIN_CONSTRUCCION, asegurarPinDeConstruccion, pinEncendido,
+    VERSION_APP,
     get vistaActual() { return vistaActual; }
   };
 })();

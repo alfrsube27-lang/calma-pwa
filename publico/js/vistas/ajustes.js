@@ -254,20 +254,17 @@ const Ajustes = (() => {
       <!-- ── La mente del chat ── -->
       ${tarjetaMente()}
 
-      <!-- ── Modo pruebas ── -->
-      <div class="tarjeta ${a.modoPruebas ? 'borde-aviso' : ''}">
+      <!-- ── En construcción ── -->
+      <div class="tarjeta borde-aviso">
         <div class="tarjeta-titulo">
-          <h3>🧪 Modo pruebas</h3>
-          <span class="pastilla ${a.modoPruebas ? 'aviso' : ''}">
-            ${a.modoPruebas ? 'encendido' : 'apagado'}</span>
+          <h3>🚧 En construcción</h3>
+          <span class="pastilla aviso">${U.esc(App.VERSION_APP)}</span>
         </div>
-        <p class="ayuda">Con esto encendido, la app te recibe siempre como si fuera
-        la primera vez: te vuelve a hacer todas las preguntas, con tus respuestas
-        ya escritas. Sirve para revisar esa pantalla.
-        <b>Tus datos no se borran.</b></p>
-        <button class="boton chico" data-modo-pruebas style="margin-top:10px">
-          ${a.modoPruebas ? 'Apagar y entrar directo a mi día' : 'Encender el modo pruebas'}
-        </button>
+        <p class="ayuda">Cada vez que salga una versión nueva, la app empieza
+        de cero: se borra lo anotado y entras como la primera vez. Es a
+        propósito, para poder probar el inicio una y otra vez.</p>
+        <p class="ayuda">Cuando la app se lance, esto se quita y tus datos
+        se quedan para siempre.</p>
       </div>
 
       <!-- ── Respaldo ── -->
@@ -584,20 +581,6 @@ const Ajustes = (() => {
     }, c);
 
     c.querySelector('[data-ver-envio]').onclick = verEnvio;
-
-    // Modo pruebas
-    c.querySelector('[data-modo-pruebas]').onclick = () => {
-      const a2 = Almacen.ajustes();
-      a2.modoPruebas = !a2.modoPruebas;
-      Almacen.guardar();
-      if (a2.modoPruebas) {
-        App.brindis('Listo. Te recibo como la primera vez. Mira cómo queda.', 'bien', 3600);
-        setTimeout(() => Bienvenida.mostrar(), 900);
-      } else {
-        App.brindis('Apagado. Ahora entras directo a tu día.', 'bien', 3000);
-        App.pintar();
-      }
-    };
 
     // Respaldo
     c.querySelector('[data-exportar]').onclick = () => {
