@@ -133,6 +133,9 @@ const Bienvenida = (() => {
       <div class="charla-guiada">
         <div class="charla" id="bv-charla"></div>
         <div id="bv-respuesta" style="margin-top:20px"></div>
+        ${App.CONSTRUCCION ? `
+          <p class="ayuda" style="text-align:center;margin:18px 0 0;opacity:.45">
+            ${U.esc(App.VERSION_APP)}</p>` : ''}
       </div>`;
 
     await App.intro({ largo: comoPrimeraVez });

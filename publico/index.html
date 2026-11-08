@@ -84,6 +84,38 @@
 <!-- Avisos amables, nunca modales de error -->
 <div id="brindis" class="brindis oculto" role="status" aria-live="polite"></div>
 
+<!-- ───────── Rompe-cachés de construcción ─────────
+     Va aquí, en el HTML, y no en app.js, a propósito: el service
+     worker guardaba los .js y los servía viejos, así que un arreglo
+     dentro de app.js nunca llegaba a ejecutarse. El HTML sí baja
+     siempre de la red, de modo que esto rompe el círculo.
+
+     Se quita al lanzar la app, junto con el modo construcción. -->
+<script>
+(function () {
+  if (!('serviceWorker' in navigator)) return;
+  navigator.serviceWorker.getRegistrations().then(function (regs) {
+    if (!regs.length) return;
+    return Promise.all(regs.map(function (r) { return r.unregister(); }))
+      .then(function () {
+        if (!window.caches) return null;
+        return caches.keys().then(function (claves) {
+          return Promise.all(claves.map(function (k) { return caches.delete(k); }));
+        });
+      })
+      .then(function () {
+        // Una sola recarga: los .js de ESTA carga ya salieron de la
+        // caché vieja. El candado evita quedarse recargando en bucle.
+        try {
+          if (sessionStorage.getItem('calma.recarga') === '1') return;
+          sessionStorage.setItem('calma.recarga', '1');
+        } catch (e) { return; }
+        location.reload();
+      });
+  }).catch(function () {});
+})();
+</script>
+
 <script src="js/util.js"></script>
 <script src="js/almacen.js"></script>
 <script src="js/calculo.js"></script>

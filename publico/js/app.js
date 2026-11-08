@@ -588,7 +588,7 @@ const App = (() => {
      Antes de lanzar la app al público: quitar `limpiarSiHayVersionNueva()`
      de `iniciar()`. Si no, cada actualización le borraría a la gente
      sus deudas y su agenda. */
-  const VERSION_APP = 'calma-v7';
+  const VERSION_APP = 'calma-v8';
   const CLAVE_VERSION = 'calma.version';
 
   function limpiarSiHayVersionNueva() {
@@ -616,10 +616,34 @@ const App = (() => {
     // Antes que nada, para que no haya un parpadeo con los colores viejos.
     Apariencia.aplicar();
 
-    // Service worker (necesario para push y para abrir sin internet)
+    // ── Service worker ──
+    // En construcción NO se registra, y además se desmonta el que haya
+    // quedado de antes. Era la causa de que los arreglos no llegaran:
+    // el service worker guarda los .js y los sigue sirviendo viejos,
+    // así que la app se veía igual por más que se publicara.
+    //
+    // Al lanzar la app hay que volver a registrarlo: es lo que permite
+    // abrirla sin internet y recibir las notificaciones.
     if ('serviceWorker' in navigator) {
-      try { await navigator.serviceWorker.register('./sw.js'); }
-      catch (e) { console.warn('SW no registrado:', e); }
+      if (CONSTRUCCION) {
+        try {
+          const regs = await navigator.serviceWorker.getRegistrations();
+          for (const r of regs) await r.unregister();
+          if (window.caches) {
+            for (const k of await caches.keys()) await caches.delete(k);
+          }
+          if (regs.length) {
+            // Los archivos de esta carga ya salieron de la caché vieja:
+            // hace falta una recarga para tomar los nuevos de verdad.
+            console.info('Calma: service worker retirado, recargando limpio.');
+            location.reload();
+            return;
+          }
+        } catch (e) { console.warn('No se pudo retirar el SW:', e); }
+      } else {
+        try { await navigator.serviceWorker.register('./sw.js'); }
+        catch (e) { console.warn('SW no registrado:', e); }
+      }
     }
 
     // Eventos globales

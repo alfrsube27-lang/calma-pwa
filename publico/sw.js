@@ -4,7 +4,7 @@
    2) Recibe las notificaciones push (con sonido) y las muestra.
    =========================================================== */
 
-const VERSION = 'calma-v7';
+const VERSION = 'calma-v8';
 
 // Archivos mínimos para que la app arranque offline.
 const ARCHIVOS = [
