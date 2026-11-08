@@ -116,6 +116,38 @@
 })();
 </script>
 
+<!-- ───────── Soplón de construcción ─────────
+     Si algo revienta, se ve EN LA PANTALLA en vez de esconderse en
+     una consola que en el teléfono nadie puede abrir. Sin esto, un
+     error deja un botón que "no hace nada" y a adivinar.
+     Se quita al lanzar la app. -->
+<script>
+(function () {
+  function avisar(texto) {
+    var caja = document.getElementById('soplon');
+    if (!caja) {
+      caja = document.createElement('div');
+      caja.id = 'soplon';
+      caja.style.cssText = 'position:fixed;left:0;right:0;bottom:0;z-index:999;'
+        + 'background:#3a2a20;color:#f0d9c8;font:12px/1.4 monospace;'
+        + 'padding:10px 12px;white-space:pre-wrap;max-height:40vh;overflow:auto;'
+        + 'border-top:2px solid #e8955c';
+      (document.body || document.documentElement).appendChild(caja);
+    }
+    caja.textContent = texto;
+  }
+  window.addEventListener('error', function (e) {
+    avisar('FALLO: ' + e.message + '
+' + (e.filename || '').split('/').pop() + ':' + e.lineno);
+  });
+  window.addEventListener('unhandledrejection', function (e) {
+    var r = e.reason;
+    avisar('FALLO (promesa): ' + ((r && (r.stack || r.message)) || r));
+  });
+  window.__soplon = avisar;
+})();
+</script>
+
 <script src="js/util.js"></script>
 <script src="js/almacen.js"></script>
 <script src="js/calculo.js"></script>

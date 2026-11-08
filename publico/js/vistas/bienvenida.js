@@ -31,6 +31,17 @@ const Bienvenida = (() => {
   let comoPrimeraVez = false;
 
   /**
+   * En construcción, la línea gris de abajo dice la versión y en qué
+   * paso va la conversación. Si tocas un botón y el paso no cambia,
+   * el flujo se quedó clavado ahí; si cambia pero no ves nada, lo que
+   * falla es el pintado. Sin esto hay que adivinar.
+   */
+  function marcarPaso(nombre) {
+    const nodo = document.getElementById('bv-version');
+    if (nodo) nodo.textContent = App.VERSION_APP + (nombre ? ' · ' + nombre : '');
+  }
+
+  /**
    * El modo pruebas se enciende desde Ajustes o con ?primera=1 en la
    * dirección, que es lo cómodo mientras se revisa en la computadora.
    * ?primera=0 lo apaga.
@@ -134,7 +145,8 @@ const Bienvenida = (() => {
         <div class="charla" id="bv-charla"></div>
         <div id="bv-respuesta" style="margin-top:20px"></div>
         ${App.CONSTRUCCION ? `
-          <p class="ayuda" style="text-align:center;margin:18px 0 0;opacity:.45">
+          <p class="ayuda" id="bv-version"
+             style="text-align:center;margin:18px 0 0;opacity:.45">
             ${U.esc(App.VERSION_APP)}</p>` : ''}
       </div>`;
 
@@ -152,8 +164,10 @@ const Bienvenida = (() => {
       : porArmar();
 
     for (const b of lista) {
+      marcarPaso(b.clave);
       await b.correr();
       marcarPreguntado(b.clave);
+      marcarPaso(b.clave + ' ok');
     }
     await cerrarPrimerDia();
   }
