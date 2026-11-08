@@ -606,9 +606,23 @@ input.monto-entrada {
 }
 
 /* Si pediste menos movimiento en iOS, el nombre solo aparece. */
+/* Con "reducir movimiento" la escena SE SIGUE VIENDO: la gota, las
+   ondas y el nombre aparecen y se van con opacidad, sin desplazarse.
+   Antes aquí se escondía todo con display:none y la intro no existía
+   para quien tiene esa opción puesta en el sistema. Quien pide menos
+   movimiento quiere menos vaivén, no una pantalla en blanco. */
 @media (prefers-reduced-motion: reduce) {
-  .intro-gota, .intro-onda { display: none; }
-  .intro-nombre, .intro-frase { animation: intro-sube .01s linear both; }
+  .intro-gota  { animation: solo-aparece .8s ease-out both; }
+  .intro-onda  { animation: solo-aparece 1s ease-out .9s both; }
+  .intro-onda.dos { animation-delay: 1.1s; }
+  .intro-nombre { animation: solo-aparece .9s ease-out 1.3s both; }
+  .intro-frase  { animation: solo-aparece .9s ease-out 2s both; }
+}
+
+@keyframes solo-aparece {
+  0%   { opacity: 0; }
+  40%  { opacity: 1; }
+  100% { opacity: 1; }
 }
 
 /* ───────── Pantallas completas: PIN y bienvenida ───────── */
@@ -797,6 +811,11 @@ input.monto-entrada {
 hr.sep { border: none; border-top: 1px solid var(--borde); margin: 20px 0; }
 
 /* Menos animación si el sistema lo pide */
+/* Apagón general de animaciones, menos la intro: esa tiene arriba su
+   propia versión suave, y si entrara aquí volvería a desaparecer. */
 @media (prefers-reduced-motion: reduce) {
-  * { animation: none !important; transition: none !important; }
+  *:not(.intro-gota):not(.intro-onda):not(.intro-nombre):not(.intro-frase) {
+    animation: none !important;
+    transition: none !important;
+  }
 }

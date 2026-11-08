@@ -38,7 +38,14 @@ const Bienvenida = (() => {
    */
   function marcarPaso(nombre) {
     const nodo = document.getElementById('bv-version');
-    if (nodo) nodo.textContent = App.VERSION_APP + (nombre ? ' · ' + nombre : '');
+    if (!nodo) return;
+    // Si el sistema pide menos movimiento, se dice: cambia cómo se ve
+    // la intro y conviene saberlo sin tener que preguntar.
+    let menos = false;
+    try { menos = matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) {}
+    nodo.textContent = App.VERSION_APP
+      + (nombre ? ' · ' + nombre : '')
+      + (menos ? ' · menos movimiento' : '');
   }
 
   /**
