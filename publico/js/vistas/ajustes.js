@@ -190,11 +190,23 @@ const Ajustes = (() => {
 
       <!-- ── Seguridad ── -->
       <div class="tarjeta">
-        <div class="tarjeta-titulo"><h3>🔒 Seguridad</h3></div>
-        <p class="ayuda">La app se bloquea al abrirla y después de 5 minutos cerrada.</p>
-        <button class="boton chico" data-cambiar-pin>Cambiar mi PIN</button>
-        <button class="boton tenue chico" data-bloquear style="margin-top:8px">
-          Bloquear ahora</button>
+        <div class="tarjeta-titulo">
+          <h3>🔒 Seguridad</h3>
+          <span class="pastilla ${a.usarPin ? 'acento' : ''}">
+            ${a.usarPin ? 'con PIN' : 'sin PIN'}</span>
+        </div>
+        <p class="ayuda">${a.usarPin
+          ? 'La app se bloquea al abrirla y después de 5 minutos cerrada.'
+          : 'La app abre directo. Tu teléfono ya tiene su propio bloqueo, '
+            + 'y una clave más solo te estorba para ver tu número.'}</p>
+        <button class="boton chico" data-usar-pin>
+          ${a.usarPin ? 'Quitar el PIN' : 'Pedirme un PIN al abrir'}
+        </button>
+        ${a.usarPin ? `
+          <button class="boton tenue chico" data-cambiar-pin style="margin-top:8px">
+            Cambiar mi PIN</button>
+          <button class="boton tenue chico" data-bloquear style="margin-top:8px">
+            Bloquear ahora</button>` : ''}
       </div>
 
       <!-- ── Servidor ── -->
@@ -225,7 +237,7 @@ const Ajustes = (() => {
         </div>
       </div>
 
-      ${App.CONSTRUCCION ? `
+      ${App.CONSTRUCCION && a.usarPin ? `
       <div class="tarjeta borde-aviso">
         <div class="tarjeta-titulo">
           <h3>🚧 Modo construcción</h3>
@@ -516,9 +528,27 @@ const Ajustes = (() => {
       App.pintar();
     };
 
-    // PIN
-    c.querySelector('[data-cambiar-pin]').onclick = App.cambiarPin;
-    c.querySelector('[data-bloquear]').onclick = App.bloquear;
+    // PIN: encenderlo o apagarlo
+    c.querySelector('[data-usar-pin]').onclick = async () => {
+      const a2 = Almacen.ajustes();
+      if (a2.usarPin) {
+        a2.usarPin = false;
+        Almacen.guardar();
+        App.brindis('Listo, ya no te pido PIN al abrir.', 'bien', 3000);
+        App.pintar();
+        return;
+      }
+      a2.usarPin = true;
+      Almacen.guardar();
+      // Si todavía no hay ninguno, lo creamos ahora
+      if (!Almacen.get().pin.hash) App.cambiarPin();
+      else { App.brindis('Listo, te lo pido al abrir.', 'bien', 3000); App.pintar(); }
+    };
+
+    const cp = c.querySelector('[data-cambiar-pin]');
+    if (cp) cp.onclick = App.cambiarPin;
+    const bq = c.querySelector('[data-bloquear]');
+    if (bq) bq.onclick = App.bloquear;
 
     // Servidor
     c.querySelector('[data-guardar-api]').onclick = () => {

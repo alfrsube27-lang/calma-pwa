@@ -304,6 +304,11 @@ const App = (() => {
     return true;
   }
 
+  /** ¿La persona pidió que se le pida PIN? Por defecto, no. */
+  function pinEncendido() {
+    return Almacen.ajustes().usarPin === true;
+  }
+
   function bloqueoHasta() {
     return Number(localStorage.getItem('calma.bloqueo') || 0);
   }
@@ -431,7 +436,7 @@ const App = (() => {
   }
 
   function bloquear() {
-    if (!Almacen.get().pin.hash) return;
+    if (!pinEncendido() || !Almacen.get().pin.hash) return;
     desbloqueada = false;
     cerrarHoja();
     mostrarPin('verificar');
@@ -603,13 +608,18 @@ const App = (() => {
 
     const e = Almacen.get();
 
-    // Primer uso: no hay PIN todavía, se entra directo a conversar
-    if (!e.configurado) {
+    // El PIN está apagado por defecto: la app vive en UN teléfono, que
+    // ya tiene su propio bloqueo. Pedir una clave encima es una traba
+    // más entre la persona y el número que vino a ver.
+    // Se enciende en Ajustes, y ahí sí pide PIN al abrir y a los
+    // 5 minutos en segundo plano.
+    if (!pinEncendido()) {
+      desbloqueada = true;
       Bienvenida.mostrar();
       return;
     }
+
     if (!e.pin.hash) {
-      // Datos importados sin PIN: pedimos uno nuevo
       mostrarPin('crear', () => { desbloqueada = true; Bienvenida.mostrar(); });
       return;
     }
@@ -619,7 +629,7 @@ const App = (() => {
   return {
     iniciar, ir, pintar, abrirHoja, cerrarHoja, brindis, confirmar, intro,
     menuMas, mostrarPin, cambiarPin, bloquear, entrarApp, ponerseAlDia,
-    CONSTRUCCION, PIN_CONSTRUCCION, asegurarPinDeConstruccion,
+    CONSTRUCCION, PIN_CONSTRUCCION, asegurarPinDeConstruccion, pinEncendido,
     get vistaActual() { return vistaActual; }
   };
 })();

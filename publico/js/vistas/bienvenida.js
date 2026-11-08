@@ -345,6 +345,13 @@ const Bienvenida = (() => {
     await decir('Hola, soy Calma.');
     await decir('Voy a estar para ayudarte a ordenar tus gastos: te digo si puedes '
       + 'gastar y te hago acordar de tus pendientes.');
+    await decir('Cada vez que abras, lo primero que vas a ver es una sola frase.');
+    await decir('Algo así: Hoy tienes S/ 45 para gastar y debes guardar S/ 20.');
+    await decir('Nada de tablas ni de gráficos. Ese número, y ya.');
+    await decir('No te voy a regañar nunca. Si gastaste de más, lo recalculo y '
+      + 'seguimos. Para eso estoy.');
+    await decir('Te hago unas preguntas cortas para poder sacar ese número. '
+      + 'La que no sepas, la saltas.');
     await decir('¿Cómo te llamas?');
 
     const r = await preguntar({
@@ -374,7 +381,9 @@ const Bienvenida = (() => {
     const a = Almacen.ajustes();
     const saludo = a.nombre ? `Bien, ${a.nombre}.` : 'Bien.';
 
-    await decir(`${saludo} Empecemos por lo más fácil: tu agenda.`);
+    await decir(`${saludo} Empecemos por lo más fácil, que es la agenda.`);
+    await decir('Lo que me digas aquí lo guardo yo y te lo recuerdo. Tú no tienes '
+      + 'que acordarte de nada.');
     await decir('Dime una cosa que tengas pendiente. La que sea, aunque sea chica: '
       + 'una llamada, un trámite, algo de la casa.');
 
@@ -427,9 +436,13 @@ const Bienvenida = (() => {
   async function bloqueDinero() {
     const a = Almacen.ajustes();
 
-    await decir('Ahora lo otro que hago: decirte cuánto puedes gastar hoy '
-      + 'sin quedarte corto a fin de mes.');
-    await decir('Para eso necesito cuatro datos. Nada más, y los puedes cambiar después.');
+    await decir('Ahora lo del dinero, que es lo principal.');
+    await decir('La idea es esta: miro lo que tienes, le aparto tu comida y lo que '
+      + 'debes pagar antes del próximo pago, y lo que sobra lo divido entre los '
+      + 'días que faltan.');
+    await decir('De ahí sale tu número de cada día. Si te lo gastas, no pasa nada: '
+      + 'mañana se recalcula solo.');
+    await decir('Necesito cuatro datos para eso. Cuatro, y los cambias cuando quieras.');
 
     // 1) Cada cuánto le pagan (el peor caso)
     await decir('¿Cuántos días pueden pasar, como máximo, entre un pago y otro?');
@@ -565,9 +578,11 @@ const Bienvenida = (() => {
   async function cerrarPrimerDia() {
     const e = Almacen.get();
     const a = Almacen.ajustes();
-    // En construcción el PIN ya viene puesto y no se le pide a nadie
-    if (App.CONSTRUCCION) await App.asegurarPinDeConstruccion();
-    const hayPin = !!e.pin.hash;
+    // El PIN está apagado por defecto, así que no se pide nada.
+    // Si alguien lo encendió en Ajustes y estamos en construcción,
+    // ya viene puesto el de equipo.
+    if (App.pinEncendido() && App.CONSTRUCCION) await App.asegurarPinDeConstruccion();
+    const hayPin = !App.pinEncendido() || !!e.pin.hash;
 
     const faltan = porArmar({ incluirSaltados: true });
     if (faltan.length) {
@@ -614,7 +629,7 @@ const Bienvenida = (() => {
       App.brindis('Todo listo. Vamos con calma.', 'bien', 3200);
     };
 
-    if (!e.pin.hash) App.mostrarPin('crear', despues);
+    if (App.pinEncendido() && !e.pin.hash) App.mostrarPin('crear', despues);
     else despues();
   }
 

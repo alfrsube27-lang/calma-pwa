@@ -67,6 +67,11 @@ const Almacen = (() => {
         metaEmergencia: null,
         ahorroEmergencia: 0,
 
+        // El PIN está apagado: la app vive en un solo teléfono, que ya
+        // tiene su propio bloqueo. Quien quiera una capa más lo
+        // enciende en Ajustes.
+        usarPin: false,
+
         // La app es suya: qué partes se ven y de qué color.
         // Todo esto se cambia hablando con el chat ("quita el calendario",
         // "ponlo más claro") o desde Ajustes, para quien prefiera botones.
